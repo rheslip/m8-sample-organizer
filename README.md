@@ -4,7 +4,8 @@ This is a Python script to organize and convert your samples for the M8 tracker.
 
 **[Watch a video on how to use this tool](https://www.youtube.com/watch?v=VI0IuEDY8HI).**
 
-# M8 Sample Organizer
+# M8 Sample Organizer updates 7/2/2025 to make it more useful for the PicoTracker
+
 
 The [M8 is a delightful, gameboy-shaped sampler, sequencer and synthesizer](https://dirtywave.com/).
 
@@ -35,6 +36,8 @@ It does lots of cleanup:
 * **Removes** duplicate words, punctuation and common filler phrases (like `processed` and `final`)
 * **Simplifies** layers of folders into one level
 * **Detects** new files added to your library each time you run it
+
+The PicoTracker is a simpler (and cheaper!) tracker very similar to the M8 - they are both based on the LSDJ tracker. The PicoTracker has a filename limit of 24 characters which may require some "aggressive" trimming of filenames. The "DELETE_WORDS" config option has been added for this. "MONO" config option added for mono output which loads much faster on the PicoTracker.
 
 # Instructions
 

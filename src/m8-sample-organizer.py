@@ -17,8 +17,10 @@ FILE_TYPES = config["FILE_TYPES"]
 SPLIT_PUNCTUATION = config["SPLIT_PUNCTUATION"]
 FILL_PUNCTUATION = config["FILL_PUNCTUATION"]
 STRIKE_WORDS = [word.lower() for word in config["STRIKE_WORDS"]]
+DELETE_WORDS = [word.lower() for word in config["DELETE_WORDS"]]
 JOIN_SEP = config["JOIN_SEP"]
 SKIP_EXISTING = config["SKIP_EXISTING"]
+MONO = config["MONO"]
 
 
 def get_files_by_type(folder, file_types=None):
@@ -108,6 +110,8 @@ def clean_file(file, unique_words):
     filename = " ".join(parts)
 
     words = filename.split()
+        # RH Remove any delete words
+    words = [word for word in words if word.lower() not in DELETE_WORDS]
 
     words = [capitalize(word) for word in words]
 
@@ -121,6 +125,8 @@ def remove_dupe_words(words, unique_words):
 
     # Remove any strike words
     words = [word for word in words if not any(word.lower().startswith(prefix) for prefix in STRIKE_WORDS)]
+
+
 
     # Add the remaining words to the set of unique words
     unique_words.update([word.lower() for word in words])
@@ -147,8 +153,12 @@ def convert_wav_to_16bit(ffmpeg_path, input_path, output_path):
     os.makedirs(os.path.dirname(output_path), exist_ok=True)
 
     # Construct the FFmpeg command
-    command = [ffmpeg_path, '-hide_banner', '-loglevel', 'error', '-y', '-i', input_path, '-acodec', 'pcm_s16le', output_path]
-
+    # FOR MONO OUTPUT
+    if MONO:
+        command = [ffmpeg_path, '-hide_banner', '-loglevel', 'error', '-y', '-i', input_path, '-acodec', 'pcm_s16le','-ac', '1', output_path]
+    else:
+        command = [ffmpeg_path, '-hide_banner', '-loglevel', 'error', '-y', '-i', input_path, '-acodec', 'pcm_s16le', output_path]
+    
     try:
         subprocess.run(command, check=True)
     except subprocess.CalledProcessError as e:
